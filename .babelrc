@@ -2,14 +2,14 @@
   "env": {
     "development": {
       "presets": [
-        "env",
-        "react"
+        "@babel/preset-env",
+        "@babel/preset-react",
       ]
     },
     "production": {
       "presets": [
-        "env",
-        "react",
+        "@babel/preset-env",
+        "@babel/preset-react",
         "minify"
       ]
     }
