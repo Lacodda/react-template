@@ -22,39 +22,6 @@ module.exports = {
           },
         ],
       },
-      // {
-      //   test: /\.scss$/,
-      //   use: [
-      //     {
-      //       loader: 'css-loader',
-      //       options: {
-      //         sourceMap: true,
-      //       },
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         plugins: [
-      //           autoprefixer({
-      //             browsers: ['ie >= 8', 'last 4 version'],
-      //           }),
-      //         ],
-      //         sourceMap: true,
-      //       },
-      //     },
-      //     {
-      //       loader: 'sass-loader',
-      //       options: {
-      //         importer: nodeSassMagicImporter(),
-      //         sourceMap: true,
-      //       },
-      //     },
-      //   ],
-      // },
-      // {
-      //   test: /\.css$/,
-      //   use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      // },
       {
         test: /(\.css|\.scss|\.sass)$/,
         use: [
