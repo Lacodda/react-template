@@ -1,6 +1,9 @@
 const fs = require('fs');
 const { join, resolve } = require('path');
+const { promisify } = require('util');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
+
+const readdir = promisify(fs.readdir);
 
 exports.getPaths = ({
   root = '..',
@@ -55,18 +58,21 @@ exports.getPaths = ({
 };
 
 // Our function that generates our html plugins
-exports.generateHtmlPlugins = (templateDir) => {
+exports.generateHtmlPlugins = async (templateDir) => {
   // Read files in template directory
-  const templateFiles = fs.readdirSync(resolve(__dirname, templateDir));
+  // const templateFiles = fs.readdirSync(templateDir);
+  const templateFiles = await readdir(templateDir);
   return templateFiles.map((item) => {
+    console.log(item);
+    
     // Split names and extension
-    const parts = item.split('.');
-    const name = parts[0];
-    const extension = parts[1];
-    // Create new HTMLWebpackPlugin with options
-    return new HTMLWebpackPlugin({
-      filename: `${name}.html`,
-      template: resolve(__dirname, `${templateDir}/${name}.${extension}`),
-    });
+    // const parts = item.split('.');
+    // const name = parts[0];
+    // const extension = parts[1];
+    // // Create new HTMLWebpackPlugin with options
+    // return new HTMLWebpackPlugin({
+    //   filename: `${name}.html`,
+    //   template: resolve(__dirname, `${templateDir}/${name}.${extension}`),
+    // });
   });
 };

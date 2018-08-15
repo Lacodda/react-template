@@ -1,6 +1,6 @@
-const { resolve } = require('path');
 const merge = require('webpack-merge');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
 const { getPaths, generateHtmlPlugins } = require('./utils');
 const parts = require('./webpack.parts');
@@ -30,6 +30,7 @@ const lintStylesOptions = {
 
 // Find all pages on pages directory
 const htmlPlugins = generateHtmlPlugins(paths.pages);
+console.log(htmlPlugins);
 
 module.exports = merge([
   {
@@ -49,7 +50,11 @@ module.exports = merge([
       modules: false,
     },
     plugins: [
-      ...htmlPlugins,
+      // ...htmlPlugins,
+      new HtmlWebPackPlugin({
+        template: './index.html',
+        filename: './index.html',
+      }),
       new FriendlyErrorsPlugin(),
       new StylelintPlugin(lintStylesOptions),
     ],
@@ -57,7 +62,7 @@ module.exports = merge([
       noParse: /\.min\.js/,
     },
   },
-  parts.loadPug(),
+  parts.loadHtml({ options: { minimize: true } }),
   parts.lintJS({ include: paths.js.src, options: lintJSOptions }),
   parts.loadFonts({
     include: paths.fonts.src,

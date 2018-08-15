@@ -5,8 +5,6 @@ module.exports = (api) => {
     presets: [
       [
         '@babel/preset-env',
-        '@babel/preset-react',
-        // 'minify': isProd, TODO: minify ???
         {
           modules: false,
           targets: {
@@ -14,6 +12,8 @@ module.exports = (api) => {
           },
         },
       ],
+      '@babel/preset-react',
+      // 'minify': isProd, TODO: minify ??? - babel-preset-minify
     ],
     plugins: [
       '@babel/plugin-syntax-dynamic-import',
