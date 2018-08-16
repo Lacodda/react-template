@@ -28,9 +28,8 @@ const lintStylesOptions = {
   // fix: true,
 };
 
-// Find all pages on pages directory
-const htmlPlugins = generateHtmlPlugins(paths.pages);
-console.log(htmlPlugins);
+// get array of HTMLWebpackPlugin's
+const htmlPlugins = generateHtmlPlugins(paths.pages, /\.html$/);
 
 module.exports = merge([
   {
@@ -45,16 +44,12 @@ module.exports = merge([
       publicPath: parts.publicPath,
     },
     stats: {
-      warningsFilter: warning => warning.includes('entrypoint size limit'),
+      warningsFilter: (warning) => warning.includes('entrypoint size limit'),
       children: false,
       modules: false,
     },
     plugins: [
-      // ...htmlPlugins,
-      new HtmlWebPackPlugin({
-        template: './index.html',
-        filename: './index.html',
-      }),
+      ...htmlPlugins,
       new FriendlyErrorsPlugin(),
       new StylelintPlugin(lintStylesOptions),
     ],

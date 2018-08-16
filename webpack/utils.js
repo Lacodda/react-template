@@ -1,10 +1,12 @@
 const fs = require('fs');
 const { join, resolve } = require('path');
-const { promisify } = require('util');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 
-const readdir = promisify(fs.readdir);
-
+/**
+ * Function that generates object with main paths
+ *
+ * @param {*} param0
+ */
 exports.getPaths = ({
   root = '..',
   src = 'src',
@@ -22,14 +24,11 @@ exports.getPaths = ({
   // Define pages dir
   pages = resolve(join(src, pages));
 
-  entry = Object.keys(entry).reduce(
-    (obj, name) => {
-      obj[name] = resolve(join(src, entry[name]));
+  entry = Object.keys(entry).reduce((obj, name) => {
+    obj[name] = resolve(join(src, entry[name]));
 
-      return obj;
-    },
-    {},
-  );
+    return obj;
+  }, {});
 
   return Object.keys(assets).reduce(
     (obj, name) => {
@@ -57,22 +56,32 @@ exports.getPaths = ({
   );
 };
 
-// Our function that generates our html plugins
-exports.generateHtmlPlugins = async (templateDir) => {
+/**
+ * Function that generates array of HTMLWebpackPlugin's
+ *
+ * @param {*} path
+ * @param {*} regexp
+ */
+exports.generateHtmlPlugins = (path, regexp = /.*/) => {
   // Read files in template directory
-  // const templateFiles = fs.readdirSync(templateDir);
-  const templateFiles = await readdir(templateDir);
-  return templateFiles.map((item) => {
-    console.log(item);
-    
+  const templateFiles = fs.readdirSync(path);
+
+  return templateFiles.reduce((result, item) => {
+    if (!regexp.test(item)) {
+      return result;
+    }
+
     // Split names and extension
-    // const parts = item.split('.');
-    // const name = parts[0];
-    // const extension = parts[1];
-    // // Create new HTMLWebpackPlugin with options
-    // return new HTMLWebpackPlugin({
-    //   filename: `${name}.html`,
-    //   template: resolve(__dirname, `${templateDir}/${name}.${extension}`),
-    // });
-  });
+    const parts = item.split('.');
+    const name = parts[0];
+    // Create new HTMLWebpackPlugin with options
+    result.push(
+      new HTMLWebpackPlugin({
+        filename: `${name}.html`,
+        template: resolve(join(path, item)),
+      }),
+    );
+
+    return result;
+  }, []);
 };
